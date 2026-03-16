@@ -1,0 +1,495 @@
+:root {
+  --bg: #0e0905;
+  --panel: #0a0704;
+  --panel-2: #0d0904;
+  --ink: #f2e8d2;
+  --muted: #a89e8a;
+  --line: #24252a;
+  --accent: #ea6b3d;
+  --accent-soft: #f39b6a;
+  --cream: #f2e7d0;
+  --shadow: rgba(0, 0, 0, 0.34);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  margin: 0 auto;
+  min-height: 100vh;
+  color: var(--ink);
+  background: var(--bg);
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  overflow: hidden;
+}
+
+html {
+  overflow: hidden;
+}
+
+.noise,
+.ambient {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  display: block;
+}
+
+.noise {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 0.5px, transparent 0.5px);
+  background-size: 4px 4px;
+  opacity: 0.12;
+}
+
+.ambient-left {
+  background: radial-gradient(circle at 18% 28%, rgba(234, 107, 61, 0.11), transparent 22%);
+}
+
+.ambient-right {
+  background: radial-gradient(circle at 82% 18%, rgba(242, 231, 208, 0.03), transparent 18%);
+}
+
+.page {
+  width: min(1240px, 95vw);
+  margin: 1.2rem auto;
+  height: calc(100vh - 2.4rem);
+  padding: 0.7rem;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0.75rem;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.35rem 0.3rem;
+  position: sticky;
+  top: 0.2rem;
+  z-index: 4;
+  backdrop-filter: blur(8px);
+}
+
+.brand-block {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-mark {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  box-shadow: none;
+}
+
+.brand-title,
+.brand-subtitle {
+  margin: 0;
+}
+
+.brand-title {
+  font-family: "Bebas Neue", "Impact", sans-serif;
+  font-size: 1.3rem;
+  letter-spacing: 0.08em;
+}
+
+.brand-subtitle {
+  color: var(--muted);
+  font-size: 0.74rem;
+}
+
+.topbar nav {
+  display: flex;
+  gap: 0.55rem;
+}
+
+.nav-link {
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(12, 12, 14, 0.76);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+  font: inherit;
+  font-size: 0.84rem;
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease, color 180ms ease, background 180ms ease;
+}
+
+.nav-link:hover,
+.nav-link.is-active {
+  color: var(--accent-soft);
+  border-color: rgba(234, 107, 61, 0.55);
+  background: rgba(18, 18, 20, 0.96);
+  transform: translateY(-1px);
+}
+
+.stage {
+  position: relative;
+  min-height: 0;
+}
+
+.view-panel {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px) scale(0.99);
+  transition: opacity 220ms ease, transform 220ms ease;
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.view-panel-active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.view-panel > * {
+  animation: reveal 280ms ease both;
+}
+
+.home-grid,
+.ticket-layout,
+.agenda-shell {
+  height: 100%;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: 0.88fr 1.12fr;
+  gap: 0.85rem;
+}
+
+.card-panel,
+.ticket-card,
+.agenda-card {
+  border-radius: 26px;
+  border: 1px solid var(--line);
+  background: #080808;
+  box-shadow: none;
+}
+
+.home-copy {
+  padding: 1.95rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.eyebrow {
+  margin: 0 0 0.4rem;
+  color: var(--accent-soft);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.home-copy h1,
+.panel-head h2 {
+  margin: 0;
+  font-family: "Bebas Neue", "Impact", sans-serif;
+  line-height: 0.95;
+  letter-spacing: 0.04em;
+}
+
+.home-copy h1 {
+  font-size: clamp(2.6rem, 5.2vw, 4.8rem);
+  margin-bottom: 0.85rem;
+}
+
+.subtitle,
+.section-copy,
+.ticket-copy,
+.agenda-card p {
+  color: var(--muted);
+  line-height: 1.72;
+}
+
+.subtitle {
+  font-size: 0.96rem;
+}
+
+.info-strip {
+  margin-top: 1.05rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+}
+
+.info-strip div {
+  padding: 0.8rem 0.9rem;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.045);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.info-strip span {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.info-strip strong {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.92rem;
+}
+
+.social-links {
+  margin-top: 1.15rem;
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.social-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+  color: var(--accent);
+  text-decoration: none;
+  border: 1px solid rgba(242, 231, 208, 0.12);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+  transition: transform 180ms ease, box-shadow 180ms ease, color 180ms ease;
+}
+
+.social-btn:hover {
+  transform: translateY(-2px);
+  color: var(--accent-soft);
+  box-shadow: 0 16px 26px rgba(234, 107, 61, 0.16);
+}
+
+.social-btn svg {
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+}
+
+.social-btn span {
+  display: none;
+}
+
+.home-visual {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.logo-halo {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(234, 107, 61, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+#event-logo {
+  position: relative;
+  z-index: 1;
+  width: min(840px, 118%);
+  max-height: 74vh;
+  object-fit: contain;
+  transform: scale(1.12);
+  transform-origin: center;
+  mix-blend-mode: lighten;
+  filter: none;
+}
+
+.logo-fallback {
+  text-align: center;
+  color: var(--muted);
+}
+
+.panel-head {
+  margin-bottom: 1rem;
+}
+
+.panel-head h2 {
+  font-size: clamp(2rem, 4.3vw, 3.4rem);
+  margin-bottom: 0.45rem;
+}
+
+.ticket-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.ticket-card {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ticket-card.featured {
+  background: #080808;
+}
+
+.tag {
+  margin: 0;
+  color: var(--accent-soft);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+.ticket-card h3,
+.agenda-card h3 {
+  margin: 0.5rem 0 0.42rem;
+  font-size: 1.32rem;
+}
+
+.feature-list {
+  margin: 0.85rem 0 0;
+  padding-left: 1rem;
+}
+
+.feature-list li {
+  margin: 0.42rem 0;
+  color: var(--muted);
+}
+
+.btn {
+  margin-top: 1rem;
+  width: 100%;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  padding: 0.9rem 1rem;
+  font: inherit;
+  font-weight: 700;
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.03);
+}
+
+.btn-buy {
+  background: linear-gradient(135deg, var(--accent), #c64a24);
+  color: #fff5ef;
+  box-shadow: 0 16px 26px rgba(234, 107, 61, 0.24);
+}
+
+.btn-buy-alt {
+  background: linear-gradient(135deg, #f2e7d0, #dccfb6);
+  color: #171719;
+  box-shadow: 0 13px 24px rgba(0, 0, 0, 0.2);
+}
+
+.agenda-shell {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+}
+
+.agenda-card {
+  padding: 1.2rem;
+}
+
+.agenda-card span {
+  display: inline-flex;
+  padding: 0.38rem 0.68rem;
+  border-radius: 999px;
+  background: rgba(234, 107, 61, 0.1);
+  color: var(--accent-soft);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.featured-agenda {
+  background: #080808;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 960px) {
+  .home-grid,
+  .ticket-layout,
+  .agenda-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .home-visual {
+    min-height: 320px;
+    padding: 0.8rem;
+  }
+
+  #event-logo {
+    width: min(700px, 118%);
+    max-height: 52vh;
+    transform: scale(1.08);
+  }
+}
+
+@media (max-width: 620px) {
+  .page {
+    width: min(96vw, 1240px);
+    margin: 0.8rem auto;
+    padding: 0.6rem;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .topbar nav {
+    flex-wrap: wrap;
+  }
+
+  .home-copy,
+  .ticket-card,
+  .agenda-card {
+    padding: 1.05rem;
+  }
+
+  .home-visual {
+    min-height: 260px;
+  }
+
+  #event-logo {
+    width: min(560px, 122%);
+    max-height: 40vh;
+    transform: scale(1.03);
+  }
+
+  .home-copy h1,
+  .panel-head h2 {
+    line-height: 1;
+  }
+
+  .info-strip {
+    grid-template-columns: 1fr;
+  }
+}
