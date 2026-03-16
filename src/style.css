@@ -19,6 +19,7 @@ body {
   margin: 0;
   margin: 0 auto;
   min-height: 100vh;
+  min-height: 100dvh;
   color: var(--ink);
   background: var(--bg);
   font-family: "Space Grotesk", "Segoe UI", sans-serif;
@@ -55,6 +56,7 @@ html {
   width: min(1240px, 95vw);
   margin: 1.2rem auto;
   height: calc(100vh - 2.4rem);
+  height: calc(100dvh - 2.4rem);
   padding: 0.7rem;
   display: grid;
   grid-template-rows: auto 1fr;
@@ -452,10 +454,19 @@ html {
 }
 
 @media (max-width: 620px) {
+  html,
+  body {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
   .page {
     width: min(96vw, 1240px);
     margin: 0.8rem auto;
+    min-height: calc(100dvh - 1.6rem);
+    height: auto;
     padding: 0.6rem;
+    grid-template-rows: auto auto;
   }
 
   .topbar {
@@ -465,7 +476,32 @@ html {
   }
 
   .topbar nav {
-    flex-wrap: wrap;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
+  .nav-link {
+    width: 100%;
+    padding: 0.62rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .stage {
+    min-height: 0;
+  }
+
+  .view-panel {
+    position: relative;
+    inset: auto;
+    overflow: visible;
+    transform: none;
+    transition: opacity 180ms ease;
+  }
+
+  .view-panel:not(.view-panel-active) {
+    display: none;
   }
 
   .home-copy,
