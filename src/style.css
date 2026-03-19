@@ -1,18 +1,25 @@
 :root {
-  --bg: #0e0905;
-  --panel: #0a0704;
-  --panel-2: #0d0904;
-  --ink: #f2e8d2;
-  --muted: #a89e8a;
-  --line: #24252a;
-  --accent: #ea6b3d;
-  --accent-soft: #f39b6a;
-  --cream: #f2e7d0;
-  --shadow: rgba(0, 0, 0, 0.34);
+  --bg: #080705;
+  --panel: #11100d;
+  --panel-2: #17140f;
+  --ink: #efe2c8;
+  --muted: #b2a58d;
+  --line: #2b261f;
+  --accent: #e56a30;
+  --accent-soft: #f29f68;
+  --cream: #efe2c8;
+  --shadow: rgba(0, 0, 0, 0.42);
+  --ps2-edge: rgba(243, 206, 164, 0.2);
+  --ps2-teal: rgba(102, 186, 175, 0.13);
+  --ps2-steel: rgba(139, 151, 173, 0.16);
 }
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  overflow: hidden;
 }
 
 body {
@@ -21,13 +28,42 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   color: var(--ink);
-  background: var(--bg);
-  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(229, 106, 48, 0.1), transparent 28%),
+    radial-gradient(circle at 82% 84%, var(--ps2-teal), transparent 30%),
+    radial-gradient(circle at 74% 10%, var(--ps2-steel), transparent 26%),
+    radial-gradient(circle at 88% 16%, rgba(242, 159, 104, 0.06), transparent 20%),
+    linear-gradient(170deg, #050404 10%, #0a0806 42%, #070605 100%);
+  font-family: "IBM Plex Mono", "Space Grotesk", "Segoe UI", sans-serif;
   overflow: hidden;
+  position: relative;
 }
 
-html {
-  overflow: hidden;
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::before {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.02) 0,
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: soft-light;
+  opacity: 0.22;
+}
+
+body::after {
+  background:
+    radial-gradient(circle at 50% -10%, rgba(242, 159, 104, 0.12), transparent 55%),
+    radial-gradient(circle at 50% 120%, rgba(7, 15, 21, 0.55), transparent 70%);
 }
 
 .noise,
@@ -42,6 +78,7 @@ html {
   background-image: radial-gradient(rgba(255, 255, 255, 0.03) 0.5px, transparent 0.5px);
   background-size: 4px 4px;
   opacity: 0.12;
+  animation: crtFlicker 3.8s steps(2, end) infinite;
 }
 
 .ambient-left {
@@ -61,6 +98,17 @@ html {
   display: grid;
   grid-template-rows: auto 1fr;
   gap: 0.75rem;
+  position: relative;
+  z-index: 1;
+}
+
+.page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.28);
 }
 
 .topbar {
@@ -72,6 +120,13 @@ html {
   top: 0.2rem;
   z-index: 4;
   backdrop-filter: blur(8px);
+  border: 1px solid rgba(239, 226, 200, 0.08);
+  border-radius: 0;
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+  background:
+    linear-gradient(180deg, rgba(18, 18, 16, 0.94), rgba(8, 8, 8, 0.9)),
+    linear-gradient(90deg, rgba(99, 112, 138, 0.12), rgba(242, 159, 104, 0.08), rgba(102, 186, 175, 0.08));
+  box-shadow: inset 0 0 0 1px var(--ps2-edge), 0 14px 28px rgba(0, 0, 0, 0.3);
 }
 
 .brand-block {
@@ -81,11 +136,11 @@ html {
 }
 
 .brand-mark {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
-  box-shadow: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: linear-gradient(135deg, var(--accent), #6f2a10);
+  box-shadow: 0 0 0 1px rgba(239, 226, 200, 0.2);
 }
 
 .brand-title,
@@ -95,8 +150,9 @@ html {
 
 .brand-title {
   font-family: "Bebas Neue", "Impact", sans-serif;
-  font-size: 1.3rem;
-  letter-spacing: 0.08em;
+  font-size: 1.5rem;
+  letter-spacing: 0.12em;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.7), -1px 0 0 rgba(229, 106, 48, 0.18);
 }
 
 .brand-subtitle {
@@ -113,12 +169,28 @@ html {
   border: 1px solid rgba(255, 255, 255, 0.07);
   background: rgba(12, 12, 14, 0.76);
   color: var(--ink);
-  border-radius: 999px;
+  border-radius: 0;
   padding: 0.55rem 0.9rem;
   font: inherit;
   font-size: 0.84rem;
   cursor: pointer;
   transition: transform 180ms ease, border-color 180ms ease, color 180ms ease, background 180ms ease;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  box-shadow: inset 0 0 0 1px rgba(243, 206, 164, 0.07);
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 4px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(242, 159, 104, 0.45), transparent);
+  opacity: 0;
+  transition: opacity 180ms ease;
 }
 
 .nav-link:hover,
@@ -126,7 +198,54 @@ html {
   color: var(--accent-soft);
   border-color: rgba(234, 107, 61, 0.55);
   background: rgba(18, 18, 20, 0.96);
-  transform: translateY(-1px);
+  transform: translateY(-1px) scale(1.01);
+}
+
+.nav-link:hover::after,
+.nav-link.is-active::after {
+  opacity: 1;
+}
+
+.nav-icon {
+  min-width: 52px;
+  padding: 0.55rem;
+  display: inline-grid;
+  place-items: center;
+  position: relative;
+}
+
+.nav-icon svg {
+  width: 21px;
+  height: 21px;
+  fill: currentColor;
+}
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: var(--accent);
+  color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .stage {
@@ -172,10 +291,34 @@ html {
 .card-panel,
 .ticket-card,
 .agenda-card {
-  border-radius: 26px;
+  position: relative;
+  isolation: isolate;
+  border-radius: 0;
+  clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
   border: 1px solid var(--line);
-  background: #080808;
-  box-shadow: none;
+  background:
+    linear-gradient(160deg, var(--panel), #0a0a09 70%),
+    linear-gradient(45deg, rgba(137, 147, 165, 0.06), transparent 28%, rgba(229, 106, 48, 0.05));
+  box-shadow: inset 0 0 0 1px var(--ps2-edge), 0 16px 28px var(--shadow);
+}
+
+.card-panel::before,
+.ticket-card::before,
+.artist-card::before,
+.cart-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.018) 0,
+    rgba(255, 255, 255, 0.018) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  opacity: 0.3;
 }
 
 .home-copy {
@@ -199,6 +342,7 @@ html {
   font-family: "Bebas Neue", "Impact", sans-serif;
   line-height: 0.95;
   letter-spacing: 0.04em;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.55), -1px 0 0 rgba(229, 106, 48, 0.24);
 }
 
 .home-copy h1 {
@@ -211,28 +355,29 @@ html {
 .ticket-copy,
 .agenda-card p {
   color: var(--muted);
-  line-height: 1.72;
+  line-height: 1.65;
 }
 
 .subtitle {
   font-size: 0.96rem;
 }
 
-.info-strip {
+.event-grid {
   margin-top: 1.05rem;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.7rem;
 }
 
-.info-strip div {
+.event-grid article {
   padding: 0.8rem 0.9rem;
-  border-radius: 18px;
+  border-radius: 0;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
   border: 1px solid rgba(255, 255, 255, 0.045);
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.03);
 }
 
-.info-strip span {
+.event-grid span {
   display: block;
   font-size: 0.72rem;
   color: var(--muted);
@@ -240,7 +385,7 @@ html {
   letter-spacing: 0.12em;
 }
 
-.info-strip strong {
+.event-grid strong {
   display: block;
   margin-top: 0.35rem;
   font-size: 0.92rem;
@@ -256,7 +401,7 @@ html {
 .social-btn {
   width: 48px;
   height: 48px;
-  border-radius: 999px;
+  border-radius: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -289,10 +434,7 @@ html {
   overflow: hidden;
   display: grid;
   place-items: center;
-  padding: 1rem;
-  border: none;
-  background: transparent;
-  box-shadow: none;
+  padding: 1.2rem;
 }
 
 .logo-halo {
@@ -305,13 +447,13 @@ html {
 #event-logo {
   position: relative;
   z-index: 1;
-  width: min(840px, 118%);
+  width: min(820px, 112%);
   max-height: 74vh;
   object-fit: contain;
-  transform: scale(1.12);
+  transform: scale(1.06);
   transform-origin: center;
-  mix-blend-mode: lighten;
-  filter: none;
+  mix-blend-mode: screen;
+  filter: contrast(1.08) saturate(0.9);
 }
 
 .logo-fallback {
@@ -342,7 +484,7 @@ html {
 }
 
 .ticket-card.featured {
-  background: #080808;
+  background: linear-gradient(150deg, #1b120d, #0f0d0b 68%);
 }
 
 .tag {
@@ -359,6 +501,15 @@ html {
   font-size: 1.32rem;
 }
 
+.ticket-price {
+  margin: 0.3rem 0 0.5rem;
+  font-family: "Bebas Neue", "Impact", sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 0.04em;
+  color: var(--cream);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
+}
+
 .feature-list {
   margin: 0.85rem 0 0;
   padding-left: 1rem;
@@ -373,12 +524,19 @@ html {
   margin-top: 1rem;
   width: 100%;
   border: none;
-  border-radius: 16px;
+  border-radius: 0;
   cursor: pointer;
   padding: 0.9rem 1rem;
   font: inherit;
   font-weight: 700;
   transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.38);
+  border-right: 1px solid rgba(0, 0, 0, 0.34);
 }
 
 .btn:hover {
@@ -389,13 +547,144 @@ html {
 .btn-buy {
   background: linear-gradient(135deg, var(--accent), #c64a24);
   color: #fff5ef;
-  box-shadow: 0 16px 26px rgba(234, 107, 61, 0.24);
+  box-shadow: inset 0 0 0 1px rgba(255, 237, 221, 0.2), 0 16px 26px rgba(234, 107, 61, 0.24);
 }
 
 .btn-buy-alt {
   background: linear-gradient(135deg, #f2e7d0, #dccfb6);
   color: #171719;
-  box-shadow: 0 13px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.14), 0 13px 24px rgba(0, 0, 0, 0.2);
+}
+
+.artists-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+  padding-bottom: 0.4rem;
+}
+
+.artist-groups {
+  display: grid;
+  gap: 1rem;
+}
+
+.artist-group h3 {
+  margin: 0 0 0.65rem;
+  font-family: "Bebas Neue", "Impact", sans-serif;
+  letter-spacing: 0.08em;
+  font-size: 1.55rem;
+}
+
+.artists-grid-text {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.artist-card {
+  position: relative;
+  isolation: isolate;
+  border-radius: 0;
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  background: linear-gradient(150deg, var(--panel-2), #090908 70%);
+  box-shadow: inset 0 0 0 1px var(--ps2-edge), 0 12px 24px var(--shadow);
+}
+
+.artist-card img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  filter: grayscale(0.3) contrast(1.08) saturate(0.82) hue-rotate(-5deg);
+}
+
+.artist-card div {
+  padding: 0.75rem;
+}
+
+.artist-card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.artist-card-text {
+  min-height: 92px;
+  display: grid;
+  align-content: center;
+  padding: 0.85rem;
+}
+
+.artist-card-text h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.artist-card p {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cart-shell {
+  position: relative;
+  isolation: isolate;
+  padding: 1.2rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.cart-empty {
+  margin: 0;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+.cart-item {
+  border: 1px solid rgba(239, 226, 200, 0.11);
+  border-radius: 0;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  padding: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.cart-item[hidden],
+.cart-actions[hidden] {
+  display: none !important;
+}
+
+.cart-label {
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.cart-item h3 {
+  margin: 0.35rem 0 0.2rem;
+}
+
+.cart-item strong {
+  font-family: "Bebas Neue", "Impact", sans-serif;
+  font-size: 1.7rem;
+  letter-spacing: 0.04em;
+}
+
+.cart-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+}
+
+.btn-clear {
+  background: transparent;
+  color: var(--cream);
+  border: 1px solid rgba(239, 226, 200, 0.15);
 }
 
 .agenda-shell {
@@ -434,11 +723,33 @@ html {
   }
 }
 
+@keyframes crtFlicker {
+  0% {
+    opacity: 0.09;
+  }
+  25% {
+    opacity: 0.13;
+  }
+  50% {
+    opacity: 0.1;
+  }
+  75% {
+    opacity: 0.15;
+  }
+  100% {
+    opacity: 0.11;
+  }
+}
+
 @media (max-width: 960px) {
   .home-grid,
   .ticket-layout,
   .agenda-shell {
     grid-template-columns: 1fr;
+  }
+
+  .artists-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .home-visual {
@@ -478,7 +789,7 @@ html {
   .topbar nav {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.45rem;
   }
 
@@ -506,7 +817,8 @@ html {
 
   .home-copy,
   .ticket-card,
-  .agenda-card {
+  .agenda-card,
+  .cart-shell {
     padding: 1.05rem;
   }
 
@@ -525,7 +837,14 @@ html {
     line-height: 1;
   }
 
-  .info-strip {
+  .event-grid,
+  .artists-grid,
+  .cart-actions {
     grid-template-columns: 1fr;
+  }
+
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

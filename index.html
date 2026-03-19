@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/src/style.css" />
@@ -27,14 +27,21 @@
           <span class="brand-mark"></span>
           <div>
             <p class="brand-title">Dystfolk</p>
-            <p class="brand-subtitle">Evento oficial</p>
+            <p class="brand-subtitle">Dystfolk Evento 2026</p>
           </div>
         </div>
 
         <nav aria-label="Secciones del evento">
           <button type="button" class="nav-link is-active" data-view="inicio">Inicio</button>
+          <button type="button" class="nav-link" data-view="artistas">Artistas</button>
           <button type="button" class="nav-link" data-view="boletas">Boletas</button>
-          <button type="button" class="nav-link" data-view="agenda">Agenda</button>
+          <button type="button" class="nav-link nav-icon" data-view="carrito" aria-label="Carrito">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 4.5h2.1l.9 3.9 1.4 6a2 2 0 0 0 2 1.5h7.9a2 2 0 0 0 1.9-1.4l1.6-5.3a1 1 0 0 0-1-.9H7.2l-.5-2H21v-2H5.6l-.2-.9A1.8 1.8 0 0 0 3.7 2H3v2.5Zm6 13.3a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6Zm8.2 0a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6Z" />
+            </svg>
+            <span id="cart-count" class="cart-count">0</span>
+            <span class="sr-only">Carrito</span>
+          </button>
         </nav>
       </header>
 
@@ -42,21 +49,25 @@
         <section id="inicio" class="view-panel view-panel-active" aria-label="Inicio del evento">
           <div class="home-grid">
             <div class="home-copy card-panel">
-              <p class="eyebrow">Inicio</p>
+              <p class="eyebrow">Dystfolk Evento</p>
               <h1>La energia de Dystfolk en una sola noche.</h1>
               <p class="subtitle">
-                Aqui va la informacion del evento. Presenta el concepto, el tono del encuentro y la identidad de la experiencia.
+                Dystrito: Trap (nombre aun no oficial)
               </p>
 
-              <div class="info-strip">
-                <div>
-                  <span>Formato</span>
-                  <strong>Evento en vivo</strong>
-                </div>
-                <div>
-                  <span>Estilo</span>
-                  <strong>Negro, crema y naranja</strong>
-                </div>
+              <div class="event-grid" aria-label="Informacion del evento">
+                <article>
+                  <span>Evento</span>
+                  <strong>Dystrito: Trap (nombre aun no oficial)</strong>
+                </article>
+                <article>
+                  <span>Fecha</span>
+                  <strong>Sabado 18 de abril</strong>
+                </article>
+                <article>
+                  <span>Lugar</span>
+                  <strong>La Matraca (Azotea) Barranquilla, Colombia</strong>
+                </article>
               </div>
 
               <div class="social-links" aria-label="Redes sociales de Dystfolk">
@@ -101,7 +112,7 @@
               </div>
             </div>
 
-            <div class="home-visual" aria-label="Logo del evento">
+            <div class="home-visual card-panel" aria-label="Logo del evento">
               <div class="logo-halo" aria-hidden="true"></div>
               <img
                 id="event-logo"
@@ -116,63 +127,104 @@
           </div>
         </section>
 
+        <section id="artistas" class="view-panel" aria-label="Artistas del evento">
+          <div class="panel-head">
+            <p class="eyebrow">Lineup</p>
+            <h2>Artistas</h2>
+            <p class="section-copy">Seccion dividida en LineUp y Djs.</p>
+          </div>
+
+          <div class="artist-groups">
+            <section class="artist-group" aria-label="LineUp principal">
+              <h3>LineUp</h3>
+              <div class="artists-grid artists-grid-text">
+                <article class="artist-card artist-card-text"><h4>Torrente</h4></article>
+                <article class="artist-card artist-card-text"><h4>Yamm</h4></article>
+                <article class="artist-card artist-card-text"><h4>Bueltiao</h4></article>
+                <article class="artist-card artist-card-text"><h4>Ninle Hussle &amp; Said Cross</h4></article>
+              </div>
+            </section>
+
+            <section class="artist-group" aria-label="Djs invitados">
+              <h3>Djs</h3>
+              <div class="artists-grid artists-grid-text">
+                <article class="artist-card artist-card-text">
+                  <h4>Dimas OV</h4>
+                  <p>Perreo</p>
+                </article>
+                <article class="artist-card artist-card-text">
+                  <h4>JotaTrez</h4>
+                  <p>Electronica</p>
+                </article>
+              </div>
+            </section>
+          </div>
+        </section>
+
         <section id="boletas" class="view-panel" aria-label="Tipos de compra">
           <div class="panel-head">
             <p class="eyebrow">Boletas</p>
-            <h2>Entradas y accesos</h2>
-            <p class="section-copy">Escoge la modalidad que prefieras y continua la compra directamente por WhatsApp.</p>
+            <h2>Selecciona tu entrada</h2>
+            <p class="section-copy">Elige una boleta y se agregara al carrito.</p>
           </div>
 
           <div class="ticket-layout">
             <article class="ticket-card featured">
               <p class="tag">Preventa</p>
-              <h3>Acceso anticipado</h3>
-              <p class="ticket-copy">Ideal para quienes quieren asegurar su lugar antes de apertura general.</p>
+              <h3>Boleta preventa</h3>
+              <p class="ticket-copy">Acceso general al evento con precio especial de lanzamiento.</p>
+              <p class="ticket-price">$15.000 COP</p>
               <ul class="feature-list">
-                <li>Reserva prioritaria</li>
-                <li>Compra directa por WhatsApp</li>
-                <li>Confirmacion personalizada</li>
+                <li>Ingreso prioritario</li>
+                <li>Atencion directa en WhatsApp</li>
+                <li>Cupos limitados</li>
               </ul>
-              <button id="presale-button" class="btn btn-buy" type="button" data-whatsapp>Comprar preventa</button>
+              <button class="btn btn-buy" type="button" data-add-ticket="preventa" data-price="15000">
+                Agregar preventa
+              </button>
             </article>
 
             <article class="ticket-card alt">
-              <p class="tag">Taquilla</p>
-              <h3>Acceso por taquilla</h3>
-              <p class="ticket-copy">Una opcion directa para gestionar tu boleta con nuestro equipo segun disponibilidad.</p>
+              <p class="tag">General</p>
+              <h3>Boleta general</h3>
+              <p class="ticket-copy">Acceso general al evento para compra regular.</p>
+              <p class="ticket-price">$20.000 COP</p>
               <ul class="feature-list">
-                <li>Venta con acompañamiento</li>
-                <li>Atencion inmediata</li>
-                <li>Proceso rapido de confirmacion</li>
+                <li>Acceso a escenario principal</li>
+                <li>Compra y confirmacion asistida</li>
+                <li>Disponibilidad sujeta a aforo</li>
               </ul>
-              <button id="boxoffice-button" class="btn btn-buy-alt" type="button" data-whatsapp>Comprar taquilla</button>
+              <button class="btn btn-buy-alt" type="button" data-add-ticket="general" data-price="20000">
+                Agregar general
+              </button>
             </article>
           </div>
         </section>
 
-        <section id="agenda" class="view-panel" aria-label="Agenda del evento">
+        <section id="carrito" class="view-panel" aria-label="Carrito de compra">
           <div class="panel-head">
-            <p class="eyebrow">Agenda</p>
-            <h2>Momentos del evento</h2>
-            <p class="section-copy">Una lectura clara del recorrido de la noche, con bloques visuales y mejor jerarquia.</p>
+            <p class="eyebrow">Carrito</p>
+            <h2>Confirma tu boleta</h2>
+            <p class="section-copy">Selecciona tu boleta y confirma la compra.</p>
           </div>
 
-          <div class="agenda-shell">
-            <article class="agenda-card">
-              <span>18:00</span>
-              <h3>Apertura de puertas</h3>
-              <p>Recepcion del publico y apertura del espacio.</p>
+          <div class="cart-shell card-panel">
+            <p id="cart-empty" class="cart-empty">Agrega una boleta al carrito</p>
+
+            <article id="cart-item" class="cart-item" hidden>
+              <div>
+                <p class="cart-label">Boleta seleccionada</p>
+                <h3 id="cart-ticket-name">Preventa</h3>
+                <p id="cart-ticket-note" class="ticket-copy">Resumen de tu compra.</p>
+              </div>
+
+              <strong id="cart-price">$45.000 COP</strong>
             </article>
-            <article class="agenda-card featured-agenda">
-              <span>20:00</span>
-              <h3>Show principal</h3>
-              <p>El momento central de la experiencia en vivo.</p>
-            </article>
-            <article class="agenda-card">
-              <span>22:00</span>
-              <h3>After session</h3>
-              <p>Cierre de la noche y extension del encuentro.</p>
-            </article>
+
+            <div id="cart-actions" class="cart-actions" hidden>
+              <button id="clear-cart" class="btn btn-clear" type="button">Vaciar carrito</button>
+              <button id="checkout-button" class="btn btn-buy" type="button" disabled>Pagar</button>
+            </div>
           </div>
         </section>
       </section>
