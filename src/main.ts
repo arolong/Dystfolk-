@@ -36,7 +36,7 @@ const formatCop = (value: number) =>
 
 const buildWhatsappMessage = (ticket: CartSelection) => {
   if (ticket.type === "preventa") {
-    return `Hola, quiero adquirir una preventa para el ${eventName}.`;
+    return "Hola, quiero adquirir una preventa para el Dystfolk Evento";
   }
 
   return `Hola, quiero adquirir una boleta general para el ${eventName}.`;
