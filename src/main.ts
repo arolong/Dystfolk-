@@ -14,6 +14,7 @@ const cartCount = document.querySelector<HTMLElement>("#cart-count");
 const cartActions = document.querySelector<HTMLElement>("#cart-actions");
 
 const whatsappUrl = "https://wa.me/573005023496";
+const eventName = "Dystfolk Evento";
 
 type TicketType = "preventa" | "general";
 
@@ -34,12 +35,11 @@ const formatCop = (value: number) =>
   }).format(value);
 
 const buildWhatsappMessage = (ticket: CartSelection) => {
-  const ticketCopy =
-    ticket.type === "preventa"
-      ? "Hola, gracias por adquirir tu boleta de preventa, a continuacion necesito que me des los siguientes datos y te contestaremos en breve: Nombre completo, Cedula y correo electronico."
-      : "Hola, gracias por adquirir tu boleta general, a continuacion necesito que me des los siguientes datos y te contestaremos en breve: Nombre completo, Cedula y correo electronico.";
+  if (ticket.type === "preventa") {
+    return `Hola, quiero adquirir una preventa para el ${eventName}.`;
+  }
 
-  return `${ticketCopy} Tipo de boleta: ${ticket.label}.`;
+  return `Hola, quiero adquirir una boleta general para el ${eventName}.`;
 };
 
 const renderCart = () => {
