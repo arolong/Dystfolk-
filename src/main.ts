@@ -12,9 +12,10 @@ const cartTicketNote = document.querySelector<HTMLElement>("#cart-ticket-note");
 const cartPrice = document.querySelector<HTMLElement>("#cart-price");
 const cartCount = document.querySelector<HTMLElement>("#cart-count");
 const cartActions = document.querySelector<HTMLElement>("#cart-actions");
+const artistPhotos = document.querySelectorAll<HTMLImageElement>(".artist-photo");
 
 const whatsappUrl = "https://wa.me/573005023496";
-const eventName = "Dystfolk Evento";
+const eventName = "Dystfolk presenta";
 
 type TicketType = "preventa" | "general";
 
@@ -36,7 +37,7 @@ const formatCop = (value: number) =>
 
 const buildWhatsappMessage = (ticket: CartSelection) => {
   if (ticket.type === "preventa") {
-    return "Hola, quiero adquirir una preventa para el Dystfolk Evento";
+    return "Hola, quiero adquirir una preventa para el Dystfolk presenta";
   }
 
   return `Hola, quiero adquirir una boleta general para el ${eventName}.`;
@@ -150,3 +151,13 @@ if (eventLogo && logoFallback) {
     logoFallback.hidden = false;
   });
 }
+
+artistPhotos.forEach((photo) => {
+  photo.addEventListener("error", () => {
+    photo.hidden = true;
+    const artistMedia = photo.closest<HTMLElement>(".artist-media");
+    if (artistMedia) {
+      artistMedia.classList.add("artist-media-missing");
+    }
+  });
+});
