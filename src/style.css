@@ -519,6 +519,47 @@ body::after {
   font-size: 1.32rem;
 }
 
+.ticket-tools {
+  margin: 0.2rem 0 0.7rem;
+}
+
+.ticket-quantity {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem;
+  border: 1px solid rgba(239, 226, 200, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+
+.qty-btn {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(239, 226, 200, 0.18);
+  background: rgba(8, 8, 8, 0.95);
+  color: var(--cream);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.qty-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(234, 107, 61, 0.55);
+  color: var(--accent-soft);
+}
+
+.qty-value {
+  min-width: 2rem;
+  text-align: center;
+  font-family: "Bebas Neue", "Impact", sans-serif;
+  font-size: 1.45rem;
+  letter-spacing: 0.04em;
+  color: var(--cream);
+}
+
 .ticket-price {
   margin: 0.3rem 0 0.5rem;
   font-family: "Bebas Neue", "Impact", sans-serif;
@@ -628,7 +669,7 @@ body::after {
 .artist-media {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 5 / 4;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   background: linear-gradient(140deg, #17120d, #0c0b09);
   overflow: hidden;
@@ -638,14 +679,35 @@ body::after {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 20%;
   display: block;
   filter: grayscale(0.3) contrast(1.08) saturate(0.82) hue-rotate(-5deg);
+}
+
+.artist-media-torrente .artist-photo {
+  object-position: center 18%;
+}
+
+.artist-media-bueltiao .artist-photo {
+  object-position: center 26%;
+}
+
+.artist-media-ninle .artist-photo {
+  object-position: center 16%;
+}
+
+.artist-media-said .artist-photo {
+  object-position: center 18%;
+}
+
+.artist-media-villa .artist-photo {
+  object-position: center 20%;
 }
 
 .artist-media-dimas .artist-photo,
 .artist-media-jotatrez .artist-photo,
 .artist-media-yamm .artist-photo {
-  object-position: center 28%;
+  object-position: center 20%;
 }
 
 .artist-placeholder {
@@ -668,8 +730,8 @@ body::after {
 }
 
 .artist-info {
-  padding: 0.85rem;
-  min-height: 72px;
+  padding: 0.7rem 0.8rem;
+  min-height: 64px;
 }
 
 .artist-card h3 {
@@ -720,6 +782,11 @@ body::after {
   letter-spacing: 0.05em;
 }
 
+.cart-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
 .cart-item {
   border: 1px solid rgba(239, 226, 200, 0.11);
   border-radius: 0;
@@ -730,6 +797,41 @@ body::after {
   justify-content: space-between;
   gap: 0.9rem;
   background: rgba(255, 255, 255, 0.02);
+}
+
+.cart-item-meta {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.cart-item-qty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+}
+
+.cart-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 0.95rem;
+  border: 1px solid rgba(239, 226, 200, 0.11);
+  background: rgba(255, 255, 255, 0.03);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.cart-summary span {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+}
+
+.cart-summary strong {
+  font-family: "Bebas Neue", "Impact", sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 0.04em;
 }
 
 .cart-item[hidden],
@@ -923,8 +1025,12 @@ body::after {
     grid-template-columns: 1fr;
   }
 
+  .ticket-quantity {
+    width: fit-content;
+  }
+
   .artist-media {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 4 / 3;
   }
 
   .cart-item {

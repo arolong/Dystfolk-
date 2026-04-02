@@ -139,7 +139,7 @@
               <h3>LineUp</h3>
               <div class="artists-grid artists-grid-text">
                 <article class="artist-card artist-card-photo">
-                  <div class="artist-media">
+                  <div class="artist-media artist-media-torrente">
                       <img class="artist-photo" src="/torrente.jpeg" alt="Foto de Torrente" loading="lazy" />
                     <span class="artist-placeholder" aria-hidden="true">T</span>
                   </div>
@@ -157,7 +157,7 @@
                   </div>
                 </article>
                 <article class="artist-card artist-card-photo">
-                  <div class="artist-media">
+                  <div class="artist-media artist-media-bueltiao">
                       <img class="artist-photo" src="/bueltiao.jpeg" alt="Foto de Bueltiao" loading="lazy" />
                     <span class="artist-placeholder" aria-hidden="true">B</span>
                   </div>
@@ -166,8 +166,8 @@
                   </div>
                 </article>
                 <article class="artist-card artist-card-photo">
-                  <div class="artist-media">
-                      <img class="artist-photo" src="/ninle-hussle.jpeg" alt="Foto de Ninle Hussle" loading="lazy" />
+                  <div class="artist-media artist-media-ninle">
+                      <img class="artist-photo" src="/ninle.jpeg" alt="Foto de Ninle Hussle" loading="lazy" />
                     <span class="artist-placeholder" aria-hidden="true">NH</span>
                   </div>
                   <div class="artist-info">
@@ -175,7 +175,7 @@
                   </div>
                 </article>
                 <article class="artist-card artist-card-photo">
-                  <div class="artist-media">
+                  <div class="artist-media artist-media-said">
                       <img class="artist-photo" src="/said-cross.jpeg" alt="Foto de Said Cross" loading="lazy" />
                     <span class="artist-placeholder" aria-hidden="true">SC</span>
                   </div>
@@ -184,7 +184,7 @@
                   </div>
                 </article>
                 <article class="artist-card artist-card-photo">
-                  <div class="artist-media">
+                  <div class="artist-media artist-media-villa">
                       <img class="artist-photo" src="/villa.jpeg" alt="Foto de Villa" loading="lazy" />
                     <span class="artist-placeholder" aria-hidden="true">V</span>
                   </div>
@@ -236,13 +236,20 @@
               <h3>Boleta preventa</h3>
               <p class="ticket-copy">Acceso general al evento con precio especial de lanzamiento.</p>
               <p class="ticket-price">$15.000 COP</p>
+              <div class="ticket-tools">
+                <div class="ticket-quantity" data-ticket-type="preventa">
+                  <button class="qty-btn" type="button" data-quantity-change="preventa" data-quantity-step="-1">-</button>
+                  <span class="qty-value" data-ticket-quantity="preventa">1</span>
+                  <button class="qty-btn" type="button" data-quantity-change="preventa" data-quantity-step="1">+</button>
+                </div>
+              </div>
               <ul class="feature-list">
                 <li>Ingreso prioritario</li>
                 <li>Atencion directa en WhatsApp</li>
                 <li>Cupos limitados</li>
               </ul>
               <button class="btn btn-buy" type="button" data-add-ticket="preventa" data-price="15000">
-                Agregar preventa
+                Agregar al carrito
               </button>
             </article>
 
@@ -271,15 +278,12 @@
           <div class="cart-shell card-panel">
             <p id="cart-empty" class="cart-empty">Agrega una boleta al carrito</p>
 
-            <article id="cart-item" class="cart-item" hidden>
-              <div>
-                <p class="cart-label">Boleta seleccionada</p>
-                <h3 id="cart-ticket-name">Preventa</h3>
-                <p id="cart-ticket-note" class="ticket-copy">Resumen de tu compra.</p>
-              </div>
+            <div id="cart-list" class="cart-list" hidden></div>
 
-              <strong id="cart-price">$45.000 COP</strong>
-            </article>
+            <div id="cart-summary" class="cart-summary" hidden>
+              <span>Total</span>
+              <strong id="cart-total">$0 COP</strong>
+            </div>
 
             <div id="cart-actions" class="cart-actions" hidden>
               <button id="clear-cart" class="btn btn-clear" type="button">Vaciar carrito</button>

@@ -5,27 +5,63 @@ const panels = document.querySelectorAll<HTMLElement>(".view-panel");
 const addTicketButtons = document.querySelectorAll<HTMLButtonElement>("[data-add-ticket]");
 const checkoutButton = document.querySelector<HTMLButtonElement>("#checkout-button");
 const clearCartButton = document.querySelector<HTMLButtonElement>("#clear-cart");
-const cartItem = document.querySelector<HTMLElement>("#cart-item");
 const cartEmpty = document.querySelector<HTMLElement>("#cart-empty");
-const cartTicketName = document.querySelector<HTMLElement>("#cart-ticket-name");
-const cartTicketNote = document.querySelector<HTMLElement>("#cart-ticket-note");
-const cartPrice = document.querySelector<HTMLElement>("#cart-price");
+const cartList = document.querySelector<HTMLElement>("#cart-list");
+const cartSummary = document.querySelector<HTMLElement>("#cart-summary");
+const cartTotal = document.querySelector<HTMLElement>("#cart-total");
 const cartCount = document.querySelector<HTMLElement>("#cart-count");
 const cartActions = document.querySelector<HTMLElement>("#cart-actions");
+const quantityButtons = document.querySelectorAll<HTMLButtonElement>("[data-quantity-change]");
+const quantityValues = document.querySelectorAll<HTMLElement>("[data-ticket-quantity]");
 const artistPhotos = document.querySelectorAll<HTMLImageElement>(".artist-photo");
 
-const whatsappUrl = "https://wa.me/573005023496";
+const whatsappUrl = "https://wa.me/573005169934";
 const eventName = "Dystfolk presenta";
 
 type TicketType = "preventa" | "general";
+
+type TicketInfo = {
+  label: string;
+  price: number;
+};
 
 type CartSelection = {
   type: TicketType;
   label: string;
   price: number;
+  quantity: number;
 };
 
-let selectedTicket: CartSelection | null = null;
+const ticketInfo: Record<TicketType, TicketInfo> = {
+  preventa: {
+    label: "Boleta Preventa",
+    price: 15000,
+  },
+  general: {
+    label: "Boleta General",
+    price: 20000,
+  },
+};
+
+const draftQuantities: Record<TicketType, number> = {
+  preventa: 1,
+  general: 1,
+};
+
+const cartSelections: Record<TicketType, CartSelection> = {
+  preventa: {
+    type: "preventa",
+    label: ticketInfo.preventa.label,
+    price: ticketInfo.preventa.price,
+    quantity: 0,
+  },
+  general: {
+    type: "general",
+    label: ticketInfo.general.label,
+    price: ticketInfo.general.price,
+    quantity: 0,
+  },
+};
 
 const formatCop = (value: number) =>
   new Intl.NumberFormat("es-CO", {
@@ -35,65 +71,154 @@ const formatCop = (value: number) =>
     maximumFractionDigits: 0,
   }).format(value);
 
-const buildWhatsappMessage = (ticket: CartSelection) => {
-  if (ticket.type === "preventa") {
-    return "Hola, quiero adquirir una preventa para el Dystfolk presenta";
+const buildWhatsappMessage = (tickets: CartSelection[]) => {
+  if (tickets.length === 0) {
+    return "Hola, quiero adquirir boletas para el Dystrap";
   }
 
-  return `Hola, quiero adquirir una boleta general para el ${eventName}.`;
+  if (tickets.length === 1 && tickets[0].type === "preventa") {
+    return "Hola, quiero adquirir una preventa para el Dystrap";
+  }
+
+  const describeTicket = (ticket: CartSelection) => {
+    if (ticket.type === "preventa") {
+      return ticket.quantity === 1 ? "1 preventa" : `${ticket.quantity} preventas`;
+    }
+
+    return ticket.quantity === 1 ? "1 boleta general" : `${ticket.quantity} boletas generales`;
+  };
+
+  const parts = tickets.map((ticket) => {
+    const quantityText = describeTicket(ticket);
+
+    if (ticket.type === "preventa") {
+      return `${quantityText} para el Dystrap`;
+    }
+
+    return `${quantityText} para el ${eventName}`;
+  });
+
+  return `Hola, quiero adquirir ${parts.join(" y ")}.`;
 };
 
-const renderCart = () => {
-  const hasSelection = Boolean(selectedTicket);
+const getCartItems = () =>
+  Object.values(cartSelections).filter((ticket) => ticket.quantity > 0);
 
-  if (!cartItem || !cartEmpty || !checkoutButton || !cartTicketName || !cartTicketNote || !cartPrice || !cartActions) {
+const renderCart = () => {
+  const items = getCartItems();
+  const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  if (!cartEmpty || !checkoutButton || !cartActions || !cartList || !cartSummary || !cartTotal) {
     return;
   }
 
   if (cartCount) {
-    cartCount.textContent = hasSelection ? "1" : "0";
+    cartCount.textContent = totalQuantity.toString();
   }
 
-  cartItem.hidden = !hasSelection;
-  cartEmpty.hidden = hasSelection;
-  cartActions.hidden = !hasSelection;
-  checkoutButton.disabled = !hasSelection;
+  cartList.innerHTML = "";
+  cartList.hidden = items.length === 0;
+  cartSummary.hidden = items.length === 0;
+  cartEmpty.hidden = items.length > 0;
+  cartActions.hidden = items.length === 0;
+  checkoutButton.disabled = items.length === 0;
 
-  if (!selectedTicket) {
+  if (items.length === 0) {
+    cartTotal.textContent = formatCop(0);
     return;
   }
 
-  cartTicketName.textContent = selectedTicket.label;
-  cartPrice.textContent = formatCop(selectedTicket.price);
-  cartTicketNote.textContent =
-    selectedTicket.type === "preventa"
-      ? "Compra de boleta preventa."
-      : "Compra de boleta general.";
+  items.forEach((item) => {
+    const cartRow = document.createElement("article");
+    cartRow.className = "cart-item";
+
+    const content = document.createElement("div");
+    content.className = "cart-item-meta";
+
+    const label = document.createElement("p");
+    label.className = "cart-label";
+    label.textContent = item.type === "preventa" ? "Preventa" : "General";
+
+    const name = document.createElement("h3");
+    name.textContent = item.label;
+
+    const note = document.createElement("p");
+    note.className = "ticket-copy";
+    note.textContent = `${item.quantity} unidad${item.quantity === 1 ? "" : "es"} seleccionada${item.quantity === 1 ? "" : "s"}.`;
+
+    const qty = document.createElement("p");
+    qty.className = "cart-item-qty";
+    qty.textContent = `Cantidad: ${item.quantity}`;
+
+    content.append(label, name, note, qty);
+
+    const price = document.createElement("strong");
+    price.textContent = formatCop(item.price * item.quantity);
+
+    cartRow.append(content, price);
+    cartList.append(cartRow);
+  });
+
+  cartTotal.textContent = formatCop(totalPrice);
 };
 
 const openWhatsappCheckout = () => {
-  if (!selectedTicket) {
+  const items = getCartItems();
+
+  if (items.length === 0) {
     return;
   }
 
-  const message = buildWhatsappMessage(selectedTicket);
+  const message = buildWhatsappMessage(items);
   const checkoutUrl = `${whatsappUrl}?text=${encodeURIComponent(message)}`;
   window.open(checkoutUrl, "_blank", "noopener,noreferrer");
 };
 
+const renderDraftQuantities = () => {
+  quantityValues.forEach((value) => {
+    const type = value.dataset.ticketQuantity;
+
+    if (type !== "preventa") {
+      return;
+    }
+
+    value.textContent = draftQuantities.preventa.toString();
+  });
+};
+
+quantityButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const type = button.dataset.quantityChange;
+    const step = Number(button.dataset.quantityStep || 0);
+
+    if (type !== "preventa") {
+      return;
+    }
+
+    const nextQuantity = draftQuantities.preventa + step;
+    draftQuantities.preventa = Math.max(1, nextQuantity);
+    renderDraftQuantities();
+  });
+});
+
 addTicketButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const type = button.dataset.addTicket;
-    const price = Number(button.dataset.price || 0);
 
     if (type !== "preventa" && type !== "general") {
       return;
     }
 
-    selectedTicket = {
+    const quantityToAdd = type === "preventa" ? draftQuantities.preventa : 1;
+
+    cartSelections[type].quantity += quantityToAdd;
+
+    cartSelections[type] = {
       type,
-      label: type === "preventa" ? "Boleta Preventa" : "Boleta General",
-      price,
+      label: ticketInfo[type].label,
+      price: Number(button.dataset.price || ticketInfo[type].price),
+      quantity: cartSelections[type].quantity,
     };
 
     renderCart();
@@ -132,6 +257,7 @@ navButtons.forEach((button) => {
 const initialHash = window.location.hash.replace("#", "");
 const initialView = initialHash || "inicio";
 setActiveView(initialView);
+renderDraftQuantities();
 renderCart();
 
 if (checkoutButton) {
@@ -140,7 +266,8 @@ if (checkoutButton) {
 
 if (clearCartButton) {
   clearCartButton.addEventListener("click", () => {
-    selectedTicket = null;
+    cartSelections.preventa.quantity = 0;
+    cartSelections.general.quantity = 0;
     renderCart();
   });
 }
