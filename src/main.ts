@@ -14,9 +14,26 @@ const cartActions = document.querySelector<HTMLElement>("#cart-actions");
 const quantityButtons = document.querySelectorAll<HTMLButtonElement>("[data-quantity-change]");
 const quantityValues = document.querySelectorAll<HTMLElement>("[data-ticket-quantity]");
 const artistPhotos = document.querySelectorAll<HTMLImageElement>(".artist-photo");
+const artistCards = document.querySelectorAll<HTMLElement>(".artist-card-photo");
+const artistRoster = document.querySelector<HTMLElement>("#artist-roster");
+const artistSelectHelp = document.querySelector<HTMLElement>("#artist-select-help");
+const artistUnlockCount = document.querySelector<HTMLElement>("#artist-unlock-count");
+const unlockProgress = document.querySelector<HTMLElement>("#unlock-progress");
+const unlockProgressFill = document.querySelector<HTMLElement>("#unlock-progress-fill");
+const unlockProgressLabel = document.querySelector<HTMLElement>("#unlock-progress-label");
+const achievementModal = document.querySelector<HTMLElement>("#achievement-modal");
+const achievementContinueButton = document.querySelector<HTMLButtonElement>("#achievement-continue");
+const achievementCloseButton = document.querySelector<HTMLButtonElement>("#achievement-close");
+const achievementTag = document.querySelector<HTMLElement>("#achievement-tag");
+const achievementTitle = document.querySelector<HTMLElement>("#achievement-title");
+const achievementCopy = document.querySelector<HTMLElement>("#achievement-copy");
 
 const whatsappUrl = "https://wa.me/573005169934";
 const eventName = "Dystfolk presenta";
+const unlockedArtistIds = new Set<string>();
+let pendingCheckoutUrl = "";
+
+type CheckoutGateState = "challenge" | "achievement";
 
 type TicketType = "preventa" | "general";
 
@@ -172,7 +189,57 @@ const openWhatsappCheckout = () => {
 
   const message = buildWhatsappMessage(items);
   const checkoutUrl = `${whatsappUrl}?text=${encodeURIComponent(message)}`;
-  window.open(checkoutUrl, "_blank", "noopener,noreferrer");
+
+  const allUnlocked = artistCards.length > 0 && unlockedArtistIds.size === artistCards.length;
+
+  if (!allUnlocked) {
+    pendingCheckoutUrl = "";
+    showCheckoutGateModal("challenge");
+    return;
+  }
+
+  pendingCheckoutUrl = checkoutUrl;
+  showCheckoutGateModal("achievement");
+};
+
+const showCheckoutGateModal = (state: CheckoutGateState) => {
+  if (!achievementModal || !achievementTag || !achievementTitle || !achievementCopy || !achievementCloseButton || !achievementContinueButton) {
+    return;
+  }
+
+  if (state === "challenge") {
+    const remainingArtists = Math.max(0, artistCards.length - unlockedArtistIds.size);
+    achievementTag.textContent = "Reto";
+    achievementTitle.textContent = `Te falta desbloquear ${remainingArtists} artista${remainingArtists === 1 ? "" : "s"}.`;
+    achievementCopy.textContent = "Completa el 100% de desbloqueo para activar el logro y poder continuar con la compra.";
+    achievementCloseButton.textContent = "Seguir desbloqueando";
+    achievementContinueButton.hidden = true;
+  } else {
+    achievementTag.textContent = "Logro";
+    achievementTitle.textContent = "Logro: Haz sido de los pocos en desbloquear a todos los artistas";
+    achievementCopy.textContent = "Progreso completado al 100%. Continua para finalizar la compra de tu boleta.";
+    achievementCloseButton.textContent = "Cerrar";
+    achievementContinueButton.hidden = false;
+  }
+
+  achievementModal.hidden = false;
+};
+
+const continueCheckout = () => {
+  if (!pendingCheckoutUrl) {
+    return;
+  }
+
+  window.open(pendingCheckoutUrl, "_blank", "noopener,noreferrer");
+  pendingCheckoutUrl = "";
+};
+
+const closeAchievementModal = () => {
+  if (!achievementModal) {
+    return;
+  }
+
+  achievementModal.hidden = true;
 };
 
 const renderDraftQuantities = () => {
@@ -185,6 +252,87 @@ const renderDraftQuantities = () => {
 
     value.textContent = draftQuantities.preventa.toString();
   });
+};
+
+const getArtistName = (card: HTMLElement) => {
+  const heading = card.querySelector<HTMLElement>(".artist-info h4");
+  return heading?.textContent?.trim() || "Artista";
+};
+
+const ensureArtistCardMetadata = () => {
+  artistCards.forEach((card) => {
+    const fallbackName = getArtistName(card)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+
+    card.dataset.artistId = fallbackName || `artist-${Math.random().toString(36).slice(2, 7)}`;
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("aria-pressed", "false");
+    card.classList.add("is-locked");
+    card.classList.remove("is-unlocked");
+  });
+};
+
+const renderArtistUnlockStatus = () => {
+  if (!artistRoster || !artistSelectHelp || !artistUnlockCount || !unlockProgress || !unlockProgressFill || !unlockProgressLabel) {
+    return;
+  }
+
+  const totalArtists = artistCards.length;
+  const unlocked = unlockedArtistIds.size;
+  const percent = totalArtists === 0 ? 0 : Math.round((unlocked / totalArtists) * 100);
+
+  artistUnlockCount.textContent = `${unlocked}/${totalArtists} desbloqueados`;
+  unlockProgressFill.style.width = `${percent}%`;
+  unlockProgressLabel.textContent = `${percent}%`;
+  unlockProgress.setAttribute("aria-valuenow", percent.toString());
+
+  if (unlocked === totalArtists) {
+    artistSelectHelp.textContent = "Todos los artistas fueron desbloqueados.";
+    return;
+  }
+
+  artistSelectHelp.textContent = "Selecciona para desbloquear cada carta y ver la foto completa.";
+};
+
+const unlockArtistCard = (card: HTMLElement) => {
+  const artistId = card.dataset.artistId;
+  if (!artistId) {
+    return;
+  }
+
+  if (unlockedArtistIds.has(artistId)) {
+    return;
+  }
+
+  unlockedArtistIds.add(artistId);
+  card.classList.remove("is-locked");
+  card.classList.add("is-unlocked");
+  card.setAttribute("aria-pressed", "true");
+  renderArtistUnlockStatus();
+};
+
+const setupArtistSelection = () => {
+  ensureArtistCardMetadata();
+
+  artistCards.forEach((card) => {
+    card.addEventListener("click", () => {
+      unlockArtistCard(card);
+    });
+
+    card.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") {
+        return;
+      }
+
+      event.preventDefault();
+      unlockArtistCard(card);
+    });
+  });
+
+  renderArtistUnlockStatus();
 };
 
 quantityButtons.forEach((button) => {
@@ -259,9 +407,29 @@ const initialView = initialHash || "inicio";
 setActiveView(initialView);
 renderDraftQuantities();
 renderCart();
+setupArtistSelection();
 
 if (checkoutButton) {
   checkoutButton.addEventListener("click", openWhatsappCheckout);
+}
+
+if (achievementContinueButton) {
+  achievementContinueButton.addEventListener("click", () => {
+    continueCheckout();
+    closeAchievementModal();
+  });
+}
+
+if (achievementCloseButton) {
+  achievementCloseButton.addEventListener("click", closeAchievementModal);
+}
+
+if (achievementModal) {
+  achievementModal.addEventListener("click", (event) => {
+    if (event.target === achievementModal) {
+      closeAchievementModal();
+    }
+  });
 }
 
 if (clearCartButton) {
