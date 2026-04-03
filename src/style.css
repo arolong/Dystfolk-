@@ -1286,19 +1286,20 @@ body::after {
   html,
   body {
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
   }
 
   .page {
-    height: auto;
+    height: calc(100dvh - 2.4rem);
     min-height: calc(100dvh - 2.4rem);
   }
 
   .view-panel {
-    position: relative;
-    inset: auto;
-    overflow: visible;
+    position: absolute;
+    inset: 0;
+    overflow: auto;
     transform: none;
+    -webkit-overflow-scrolling: touch;
   }
 
   .view-panel:not(.view-panel-active) {
