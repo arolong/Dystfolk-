@@ -134,19 +134,6 @@
             <p class="section-copy">Seccion dividida en LineUp y Djs.</p>
           </div>
 
-          <div class="character-select-ui card-panel" aria-live="polite">
-            <p class="tag">Character Select</p>
-            <p id="artist-select-help" class="character-select-help">Selecciona para desbloquear cada carta y ver la foto completa.</p>
-            <div id="artist-roster" class="artist-roster">
-              <p class="artist-roster-empty">Progreso de desbloqueo</p>
-              <p id="artist-unlock-count" class="artist-unlock-count">0/0 desbloqueados</p>
-            </div>
-            <div id="unlock-progress" class="unlock-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progreso de desbloqueo">
-              <span id="unlock-progress-fill" class="unlock-progress-fill"></span>
-            </div>
-            <p id="unlock-progress-label" class="unlock-progress-label">0%</p>
-          </div>
-
           <div class="artist-groups">
             <section class="artist-group" aria-label="LineUp principal">
               <h3>LineUp</h3>
@@ -248,7 +235,7 @@
               <p class="tag">Preventa</p>
               <h3>Boleta preventa</h3>
               <p class="ticket-copy">Acceso general al evento con precio especial de lanzamiento.</p>
-              <p class="ticket-price">$15.000 COP</p>
+              <p id="price-preventa" class="ticket-price">$15.000 COP</p>
               <div class="ticket-tools">
                 <div class="ticket-quantity" data-ticket-type="preventa">
                   <button class="qty-btn" type="button" data-quantity-change="preventa" data-quantity-step="-1">-</button>
@@ -261,7 +248,8 @@
                 <li>Atencion directa en WhatsApp</li>
                 <li>Cupos limitados</li>
               </ul>
-              <button class="btn btn-buy" type="button" data-add-ticket="preventa" data-price="15000">
+              <p id="preventa-stock-note" class="ticket-copy">Stock preventa disponible: por definir</p>
+              <button id="add-preventa-ticket" class="btn btn-buy" type="button" data-add-ticket="preventa" data-price="15000">
                 Agregar al carrito
               </button>
             </article>
@@ -270,7 +258,7 @@
               <p class="tag">General</p>
               <h3>Boleta general</h3>
               <p class="ticket-copy">Acceso general al evento para compra regular.</p>
-              <p class="ticket-price">$20.000 COP</p>
+              <p id="price-general" class="ticket-price">$20.000 COP</p>
               <ul class="feature-list">
                 <li>Acceso a escenario principal</li>
                 <li>Compra y confirmacion asistida</li>
@@ -310,8 +298,8 @@
     <div id="achievement-modal" class="achievement-modal" hidden>
       <div class="achievement-dialog" role="dialog" aria-modal="true" aria-labelledby="achievement-title">
         <p id="achievement-tag" class="tag">Logro</p>
-        <h3 id="achievement-title">Logro: Haz sido de los pocos en desbloquear a todos los artistas</h3>
-        <p id="achievement-copy" class="ticket-copy">Progreso completado al 100%. Continua para finalizar la compra de tu boleta.</p>
+        <h3 id="achievement-title">Progreso completado</h3>
+        <p id="achievement-copy" class="ticket-copy">Es hora de finalizar con tu compra</p>
         <div class="achievement-actions">
           <button id="achievement-close" class="btn btn-clear" type="button">Cerrar</button>
           <button id="achievement-continue" class="btn btn-buy" type="button">Continuar compra</button>
