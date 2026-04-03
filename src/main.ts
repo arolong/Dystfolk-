@@ -14,9 +14,16 @@ const cartActions = document.querySelector<HTMLElement>("#cart-actions");
 const quantityButtons = document.querySelectorAll<HTMLButtonElement>("[data-quantity-change]");
 const quantityValues = document.querySelectorAll<HTMLElement>("[data-ticket-quantity]");
 const artistPhotos = document.querySelectorAll<HTMLImageElement>(".artist-photo");
+const achievementModal = document.querySelector<HTMLElement>("#achievement-modal");
+const achievementContinueButton = document.querySelector<HTMLButtonElement>("#achievement-continue");
+const achievementCloseButton = document.querySelector<HTMLButtonElement>("#achievement-close");
+const achievementTag = document.querySelector<HTMLElement>("#achievement-tag");
+const achievementTitle = document.querySelector<HTMLElement>("#achievement-title");
+const achievementCopy = document.querySelector<HTMLElement>("#achievement-copy");
 
 const whatsappUrl = "https://wa.me/573005169934";
 const eventName = "Dystfolk presenta";
+let pendingCheckoutUrl = "";
 
 type TicketType = "preventa" | "general";
 
@@ -163,6 +170,27 @@ const renderCart = () => {
   cartTotal.textContent = formatCop(totalPrice);
 };
 
+const showAchievementModal = () => {
+  if (!achievementModal || !achievementTag || !achievementTitle || !achievementCopy || !achievementContinueButton || !achievementCloseButton) {
+    return;
+  }
+
+  achievementTag.textContent = "Logro";
+  achievementTitle.textContent = "Progreso completado";
+  achievementCopy.textContent = "Es hora de finalizar con tu compra";
+  achievementContinueButton.hidden = false;
+  achievementCloseButton.textContent = "Cerrar";
+  achievementModal.hidden = false;
+};
+
+const hideAchievementModal = () => {
+  if (!achievementModal) {
+    return;
+  }
+
+  achievementModal.hidden = true;
+};
+
 const openWhatsappCheckout = () => {
   const items = getCartItems();
 
@@ -172,7 +200,8 @@ const openWhatsappCheckout = () => {
 
   const message = buildWhatsappMessage(items);
   const checkoutUrl = `${whatsappUrl}?text=${encodeURIComponent(message)}`;
-  window.open(checkoutUrl, "_blank", "noopener,noreferrer");
+  pendingCheckoutUrl = checkoutUrl;
+  showAchievementModal();
 };
 
 const renderDraftQuantities = () => {
@@ -262,6 +291,28 @@ renderCart();
 
 if (checkoutButton) {
   checkoutButton.addEventListener("click", openWhatsappCheckout);
+}
+
+if (achievementContinueButton) {
+  achievementContinueButton.addEventListener("click", () => {
+    if (pendingCheckoutUrl) {
+      window.open(pendingCheckoutUrl, "_blank", "noopener,noreferrer");
+      pendingCheckoutUrl = "";
+    }
+    hideAchievementModal();
+  });
+}
+
+if (achievementCloseButton) {
+  achievementCloseButton.addEventListener("click", hideAchievementModal);
+}
+
+if (achievementModal) {
+  achievementModal.addEventListener("click", (event) => {
+    if (event.target === achievementModal) {
+      hideAchievementModal();
+    }
+  });
 }
 
 if (clearCartButton) {
