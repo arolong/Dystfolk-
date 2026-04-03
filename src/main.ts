@@ -41,11 +41,11 @@ type CartSelection = {
 
 const ticketInfo: Record<TicketType, TicketInfo> = {
   preventa: {
-    label: "Boleta Preventa",
+    label: "Preventa",
     price: 15000,
   },
   general: {
-    label: "Boleta General",
+    label: "Entrada General",
     price: 20000,
   },
 };
@@ -92,7 +92,7 @@ const buildWhatsappMessage = (tickets: CartSelection[]) => {
       return ticket.quantity === 1 ? "1 preventa" : `${ticket.quantity} preventas`;
     }
 
-    return ticket.quantity === 1 ? "1 boleta general" : `${ticket.quantity} boletas generales`;
+    return ticket.quantity === 1 ? "1 entrada general" : `${ticket.quantity} entradas generales`;
   };
 
   const parts = tickets.map((ticket) => {
