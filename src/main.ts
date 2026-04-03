@@ -22,7 +22,7 @@ const achievementTitle = document.querySelector<HTMLElement>("#achievement-title
 const achievementCopy = document.querySelector<HTMLElement>("#achievement-copy");
 
 const whatsappUrl = "https://wa.me/573005169934";
-const eventName = "Dystfolk presenta";
+const eventName = "⛓️ DYSTRAP ⛓️";
 let pendingCheckoutUrl = "";
 
 type TicketType = "preventa" | "general";
@@ -79,33 +79,16 @@ const formatCop = (value: number) =>
   }).format(value);
 
 const buildWhatsappMessage = (tickets: CartSelection[]) => {
-  if (tickets.length === 0) {
-    return "Hola, quiero adquirir boletas para el Dystrap";
+  const preventa = tickets.find((ticket) => ticket.type === "preventa");
+
+  if (!preventa || preventa.quantity === 0) {
+    return `Hola, quiero adquirir la preventa para el ${eventName}.`;
   }
 
-  if (tickets.length === 1 && tickets[0].type === "preventa") {
-    return "Hola, quiero adquirir una preventa para el Dystrap";
-  }
+  const quantityText = `${preventa.quantity} entrada${preventa.quantity === 1 ? "" : "s"}`;
+  const totalValue = formatCop(preventa.quantity * preventa.price);
 
-  const describeTicket = (ticket: CartSelection) => {
-    if (ticket.type === "preventa") {
-      return ticket.quantity === 1 ? "1 preventa" : `${ticket.quantity} preventas`;
-    }
-
-    return ticket.quantity === 1 ? "1 entrada general" : `${ticket.quantity} entradas generales`;
-  };
-
-  const parts = tickets.map((ticket) => {
-    const quantityText = describeTicket(ticket);
-
-    if (ticket.type === "preventa") {
-      return `${quantityText} para el Dystrap`;
-    }
-
-    return `${quantityText} para el ${eventName}`;
-  });
-
-  return `Hola, quiero adquirir ${parts.join(" y ")}.`;
+  return `Hola, quiero adquirir la preventa (${quantityText} / ${totalValue}) para el ${eventName}. Total: ${totalValue}.`;
 };
 
 const getCartItems = () =>
