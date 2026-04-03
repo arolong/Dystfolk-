@@ -1281,3 +1281,27 @@ body::after {
     align-items: flex-start;
   }
 }
+
+@media (hover: none) and (pointer: coarse) {
+  html,
+  body {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .page {
+    height: auto;
+    min-height: calc(100dvh - 2.4rem);
+  }
+
+  .view-panel {
+    position: relative;
+    inset: auto;
+    overflow: visible;
+    transform: none;
+  }
+
+  .view-panel:not(.view-panel-active) {
+    display: none;
+  }
+}
