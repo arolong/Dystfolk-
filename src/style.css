@@ -1300,6 +1300,12 @@ body::after {
     overflow: auto;
     transform: none;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: auto;
+    touch-action: pan-y;
+  }
+
+  .stage {
+    touch-action: pan-y;
   }
 
   .view-panel:not(.view-panel-active) {
