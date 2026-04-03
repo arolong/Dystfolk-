@@ -863,6 +863,48 @@ body::after {
   gap: 0.7rem;
 }
 
+.achievement-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(2, 3, 6, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.achievement-modal[hidden] {
+  display: none;
+}
+
+.achievement-dialog {
+  width: min(540px, 95vw);
+  padding: 1rem;
+  border: 1px solid rgba(135, 191, 255, 0.5);
+  background:
+    linear-gradient(160deg, #0b0f15, #09080b 72%),
+    linear-gradient(45deg, rgba(137, 147, 165, 0.08), transparent 28%, rgba(229, 106, 48, 0.07));
+  box-shadow:
+    inset 0 0 0 1px rgba(243, 206, 164, 0.2),
+    0 20px 36px rgba(0, 0, 0, 0.45),
+    0 0 26px rgba(135, 191, 255, 0.2);
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+}
+
+.achievement-dialog h3 {
+  margin: 0.45rem 0 0.7rem;
+  font-family: "Russo One", "Bebas Neue", "Impact", sans-serif;
+  line-height: 1.2;
+}
+
+.achievement-actions {
+  margin-top: 0.9rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.7rem;
+}
+
 .btn-clear {
   background: transparent;
   color: var(--cream);
