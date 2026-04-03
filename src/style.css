@@ -1294,10 +1294,15 @@ body::after {
     min-height: calc(100dvh - 2.4rem);
   }
 
+  .stage {
+    height: 100%;
+  }
+
   .view-panel {
     position: absolute;
     inset: 0;
     overflow: auto;
+    height: 100%;
     transform: none;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: auto;
